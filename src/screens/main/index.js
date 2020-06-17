@@ -14,6 +14,7 @@ import {
   TextInput,
   Button,
   TouchableOpacity,
+  Alert,
 } from 'react-native'
 import Slider from '@react-native-community/slider'
 import {BotonCredito} from '../../components/BotonCredito'
@@ -31,6 +32,37 @@ const MainScreen: () => React$Node = () => {
   const [plazo, setPlazo] = useState()
   let cantidadFija = monto / plazo
 
+  const funcionsetMonto = valor => {
+    console.log(valor)
+    console.log(parseInt(valor))
+    if (parseInt(valor) > 5000 && parseInt(valor) < 50000) {
+      setMonto(valor)
+    } 
+    /*if (parseInt(valor) > 5000 && parseInt(valor) < 50000) {
+      setMonto(valor)
+    } else {
+      let temporal = 5000
+      setMonto(temporal.toString())
+      Alert.alert(
+        'Error',
+        'Numero introducido es erroneo',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {text: 'OK', onPress: () => console.log('OK Pressed')},
+        ],
+        {cancelable: false},
+      )
+    }*/
+  }
+
+  const funcionComprobar = () => {
+    console.log(monto)
+  }
+
   //UI
   return (
     <View style={styles.mainContainer}>
@@ -45,8 +77,10 @@ const MainScreen: () => React$Node = () => {
               <TextInput
                 style={styles.txtInputMonto}
                 keyboardType='numeric'
-                onChangeText={val => setMonto(val)}
-                value={monto}
+                onChangeText={valor => funcionsetMonto(valor)}
+                defaultValue={`$ ${monto}`}
+                textAlign='center'
+                onSubmitEditing={() => funcionComprobar()}
               />
             </View>
             <Slider
@@ -56,6 +90,7 @@ const MainScreen: () => React$Node = () => {
               step={1}
               minimumTrackTintColor='#FFFFFF'
               maximumTrackTintColor='#000000'
+              onFocus={() => setMonto('')}
               onValueChange={val => setMonto(val.toString())}
             />
             <View style={styles.cantidades}>
@@ -70,6 +105,7 @@ const MainScreen: () => React$Node = () => {
                 style={styles.txtInputMonto}
                 keyboardType='numeric'
                 onChangeText={val => setPlazo(val)}
+                textAlign='center'
                 value={plazo}
               />
             </View>
@@ -119,12 +155,16 @@ const styles = StyleSheet.create({
   },
   outputContainer: {
     flex: 1,
+    width: '90%',
+    alignSelf: 'center',
     backgroundColor: '#00365c',
     flexDirection: 'column',
     justifyContent: 'space-around',
   },
   buttonsContainer: {
     flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
   },
   mainContent1: {
     flex: 1,
@@ -160,6 +200,8 @@ const styles = StyleSheet.create({
     borderColor: '#FFFFFF',
     borderWidth: 1,
     color: '#FFFFFF',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   slider: {
     alignSelf: 'center',
